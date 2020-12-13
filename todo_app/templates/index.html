@@ -11,8 +11,25 @@
     <div class="col-md-12">
       <h2>Items</h2>
       <ul class="list-group mb-4">
-        <!-- List the todo items here -->
+        {% for item in items %}
+          <li>
+            {{item.title}} - {{item.status}}
+
+            {% if item.status == "Not Started" %}
+            <form action="/completeItem/{{item.id}}"method="post" >
+            <button type="submit">Completed</button>
+            </form>
+            {% endif  %}
+            </li>
+        {% endfor %}
       </ul>
+    </div>
+    <div class="col-md-12">
+      <form action = "/addItem" method="post">
+        <label>New To Do:</label><br>
+        <input type="text" name="new_todo_item"><br>
+        <input type="submit" value="Submit">
+      </form>
     </div>
   </div>
 {% endblock %}
