@@ -9,6 +9,7 @@ app.config.from_object(Config)
 @app.route('/')
 def index():
     items_list = session.get_items()
+    
     return render_template("index.html", items = items_list)
 
 @app.route('/addItem', methods =["POST"])

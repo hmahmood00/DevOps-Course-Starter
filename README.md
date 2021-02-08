@@ -50,3 +50,16 @@ You should see output similar to the following:
  * Debugger PIN: 226-556-590
 ```
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
+
+# Docker build
+# explain what the commands will do show the production modes and dev mode 
+Development 
+```bash
+docker build --target development --tag todo_app .      
+docker run -v "$(pwd)/todo_app:/app/todo_app" --env-file .env -p 5000:5000  todo_app 
+```
+
+docker build --target production --tag todo_app:prod .
+docker run --env-file .env -p 8080:8080 todo_app:prod
+
+
