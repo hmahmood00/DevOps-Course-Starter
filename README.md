@@ -51,15 +51,25 @@ You should see output similar to the following:
 ```
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
 
-# Docker build
-# explain what the commands will do show the production modes and dev mode 
-Development 
+# Docker build 
+We have two different environments Development and Production. The image has all been set up and no need to run any other commands.
+# Development 
+To run development you will need to launch the power shell and run the following commands 
 ```bash
-docker build --target development --tag todo_app .      
+docker build --target development --tag todo_app . 
+
 docker run -v "$(pwd)/todo_app:/app/todo_app" --env-file .env -p 5000:5000  todo_app 
 ```
+Once these commands are successfully run you can access the application via: http://localhost:5000/ 
+To exit in powershell press Ctr + c
 
+# Production
+To run production  you will need to launch the power shell and run the following commands 
+```bash
 docker build --target production --tag todo_app:prod .
-docker run --env-file .env -p 8080:8080 todo_app:prod
 
+docker run --env-file .env -p 8080:8080 todo_app:prod
+```
+Once these commands are successfully run you can access the application via: http://localhost:8080/ 
+To exit in powershell press Ctr + c
 
