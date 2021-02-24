@@ -1,6 +1,10 @@
 from flask import Flask, render_template, redirect, request, Response
 import todo_app.data.session_items as session
 from todo_app.flask_config import Config
+# This code sample uses the 'requests' library:
+# http://docs.python-requests.org
+import requests
+import os
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -8,9 +12,27 @@ app.config.from_object(Config)
 
 @app.route('/')
 def index():
-    items_list = session.get_items()
-    
-    return render_template("index.html", items = items_list)
+    url = "https://api.trello.com/1/boards/MFxbg4oi/cards"
+    query = {
+        'key': os.getenv("TRELLO_KEY"),
+        'token': os.getenv("TRELLO_TOKEN")
+    }
+
+    response = requests.get(
+    url,
+    params=query
+    )
+
+    trello_items = (response.json()) #declare variable and add to the line below items_list
+    for item in trello_items:
+        if item["idList"] == '5ff3a8b1997284580b7a4fcc':
+            item["status"] = "Done"
+
+        elif item["idList"] == '5ff3a8b1997284580b7a4fcb':
+            item["status"] = "Doing"
+
+        else: item["status"] = "Todo"
+    return render_template("index.html", items = trello_items)
 
 @app.route('/addItem', methods =["POST"])
 def add():
