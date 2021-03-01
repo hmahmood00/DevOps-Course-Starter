@@ -15,7 +15,7 @@
           <li>
             {{item.name}} - {{item.status}}
 
-            {% if item.status == "Todo" %}
+            {% if item.status == "Todo" or item.status == "Doing" %}
             <form action="/completeItem/{{item.id}}"method="post" >
             <button type="submit">Completed</button>
             </form>

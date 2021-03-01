@@ -8,7 +8,6 @@ import os
 app = Flask(__name__)
 app.config.from_object(Config)
 
-
 @app.route('/')
 def index():
     url = "https://api.trello.com/1/boards/MFxbg4oi/cards"
@@ -22,13 +21,12 @@ def index():
     params=query
     )
 
-
-    
-
     trello_items = (response.json()) #declare variable and add to the line below items_list
     for item in trello_items:
         if item["idList"] == '5ff3a8b1997284580b7a4fcc':
             item["status"] = "Done"
+        elif item["idList"] == '5ff3a8b1997284580b7a4fcb':
+            item["status"] = "Doing"
         else: item["status"] = "Todo"
     return render_template("index.html", items = trello_items)
 
@@ -51,10 +49,17 @@ def add():
 
 @app.route('/completeItem/<id>', methods =["POST"])
 def complete_item(id):
-    converted_id = int(id)
-    item = request.get_item(converted_id)
-    item["status"] = "Completed"
-    request.save_item(item)
+    url = f"https://api.trello.com/1/cards/{id}"
+    query = {
+        'key': os.getenv("TRELLO_KEY"),
+        'token': os.getenv("TRELLO_TOKEN"),
+        'idList': os.getenv("TRELLO_COMPLETE_IDLIST"),
+    }
+    response = requests.request(
+    "PUT",
+    url,
+    params=query
+    )
     return redirect ("/")
 
 if __name__ == '__main__':
