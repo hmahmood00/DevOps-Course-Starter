@@ -47,6 +47,21 @@ def add():
     )
     return redirect ("/")
 
+@app.route('/doingItem/<id>', methods =["POST"])
+def doing_item(id):
+    url = f"https://api.trello.com/1/cards/{id}"
+    query = {
+        'key': os.getenv("TRELLO_KEY"),
+        'token': os.getenv("TRELLO_TOKEN"),
+        'idList': os.getenv("TRELLO_DOING_IDLIST"),
+    }
+    response = requests.request(
+    "PUT",
+    url,
+    params=query
+    )
+    return redirect ("/")
+
 @app.route('/completeItem/<id>', methods =["POST"])
 def complete_item(id):
     url = f"https://api.trello.com/1/cards/{id}"
