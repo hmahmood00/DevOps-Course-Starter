@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, request, Response
 from todo_app.flask_config import Config
+from todo_app.cards import TodoItem
 # This code sample uses the 'requests' library:
 # http://docs.python-requests.org
 import requests
@@ -21,6 +22,8 @@ def index():
     params=query
     )
 
+    myItems = []
+
     trello_items = (response.json()) #declare variable and add to the line below items_list
     for item in trello_items:
         if item["idList"] == '5ff3a8b1997284580b7a4fcc':
@@ -28,7 +31,8 @@ def index():
         elif item["idList"] == '5ff3a8b1997284580b7a4fcb':
             item["status"] = "Doing"
         else: item["status"] = "Todo"
-    return render_template("index.html", items = trello_items)
+        myItems.append(TodoItem(item['id'], item['status'], item['name']))
+    return render_template("index.html", items = myItems)
 
 @app.route('/addItem', methods =["POST"])
 def add():
@@ -38,7 +42,7 @@ def add():
     'key': os.getenv("TRELLO_KEY"),
     'token': os.getenv("TRELLO_TOKEN"),
     'idList': os.getenv("TRELLO_TODO_IDLIST"),
-    'name': name
+    'name': name 
     }
     response = requests.request(
     "POST",
