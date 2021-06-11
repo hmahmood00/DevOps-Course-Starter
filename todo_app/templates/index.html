@@ -13,9 +13,13 @@
       <ul class="list-group mb-4">
         {% for item in items %}
           <li>
-            {{item.title}} - {{item.status}}
+            {{item.name}} - {{item.status}}
 
-            {% if item.status == "Not Started" %}
+            {% if item.status == "Todo" %}
+            <form action="/doingItem/{{item.id}}"method="post" >
+            <button type="submit">Doing</button>
+            </form>
+            {% elif item.status == "Doing" %}
             <form action="/completeItem/{{item.id}}"method="post" >
             <button type="submit">Completed</button>
             </form>

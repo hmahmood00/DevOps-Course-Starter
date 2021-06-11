@@ -73,3 +73,21 @@ docker run --env-file .env -p 8080:8080 todo_app:prod
 Once these commands are successfully run you can access the application via: http://localhost:8080/ 
 To exit in powershell press Ctr + c
 
+
+
+# Module 2 trello apis
+
+* You will need to create a  trello account if you do not have one already.
+*  Make a new Todo board 
+* You will need to go to https://trello.com/app-key to get your Trello app api key this goes in your .env under TRELLO_KEY
+* In the same url if you follow steps to generate a token and add it to TRELLO_TOKEN in the .env
+* You will then need to find the relevant id's for your To Do, Doing and Completed/Done lists
+* I used postman to set up my requests to see what each api request brings back if you add the relevant keys to the request 
+GET https://api.trello.com/1/boards/(BOARDID)/lists?key=(TRELLO_KEY)&token=(TRELLO_TOKEN) will show all the boards with their ids if you add them to the .env file
+
+* TRELLO_TODO_IDLIST= this is the do card list id in trello
+* TRELLO_DOING_IDLIST= this is the doing card list id in trello
+* TRELLO_COMPLETE_IDLIST= this is the completed/done card list id in trello
+
+To run if you do it for the first time do poetry install 
+followed by poetry run flask run
