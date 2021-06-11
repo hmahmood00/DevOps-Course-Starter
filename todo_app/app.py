@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, request, Response
 from todo_app.flask_config import Config
-from todo_app.cards import TodoItem
+from todo_app.todo_item import TodoItem
+from todo_app.view_model import ViewModel
 # This code sample uses the 'requests' library:
 # http://docs.python-requests.org
 import requests
@@ -11,7 +12,7 @@ app.config.from_object(Config)
 
 @app.route('/')
 def index():
-    url = "https://api.trello.com/1/boards/MFxbg4oi/cards"
+    url = f"https://api.trello.com/1/boards/{os.getenv('TRELLO_BOARD_ID')}/cards"
     query = {
         'key': os.getenv("TRELLO_KEY"),
         'token': os.getenv("TRELLO_TOKEN")
@@ -22,17 +23,14 @@ def index():
     params=query
     )
 
-    myItems = []
+    my_items = []
 
-    trello_items = (response.json()) #declare variable and add to the line below items_list
-    for item in trello_items:
-        if item["idList"] == '5ff3a8b1997284580b7a4fcc':
-            item["status"] = "Done"
-        elif item["idList"] == '5ff3a8b1997284580b7a4fcb':
-            item["status"] = "Doing"
-        else: item["status"] = "Todo"
-        myItems.append(TodoItem(item['id'], item['status'], item['name']))
-    return render_template("index.html", items = myItems)
+    trello_cards = (response.json()) #declare variable and add to the line below items_list
+    for card in trello_cards:
+        my_items.append(TodoItem.from_trello_card(card))
+
+    item_view_model = ViewModel(my_items)
+    return render_template('index.html', view_model=item_view_model)
 
 @app.route('/addItem', methods =["POST"])
 def add():
