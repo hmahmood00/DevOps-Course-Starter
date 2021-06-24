@@ -11,6 +11,7 @@ class ViewModel:
 
     @property
     def todo_items(self):
+        
         return self._items
 
     @property
