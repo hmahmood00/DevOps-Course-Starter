@@ -20,6 +20,6 @@ class TodoItem:
             status = "Doing"
         else: status = "Todo"
 
-        return cls(id, name, status)
+        return cls(id, status, name)
 
 
